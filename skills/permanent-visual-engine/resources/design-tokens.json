@@ -1,0 +1,16 @@
+{
+    "colors": {
+        "deepBlue": "#1E4094",
+        "violet": "#7C3AED",
+        "pinkOrange": "#F472B6",
+        "bgBlack": "#0A0A0A",
+        "anthracite": "#1A1A1A"
+    },
+    "gradients": {
+        "permanent": "linear-gradient(90deg, #1E4094 0%, #7C3AED 50%, #F472B6 100%)"
+    },
+    "rules": {
+        "infoPanelHeightMax": "40px",
+        "signMasking": true
+    }
+}
