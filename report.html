@@ -1,0 +1,1749 @@
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Executive Report: Business DNA — Welding Robotics</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-dark: #0A0A0A;
+            /* Permanent base */
+            --bg-surface: rgba(255, 255, 255, 0.02);
+            --perm-gradient: linear-gradient(90deg, #1E4094 0%, #7C3AED 50%, #F472B6 100%);
+            --text-primary: #ffffff;
+            --text-secondary: #a0a0a0;
+            --border: rgba(255, 255, 255, 0.1);
+            --glass: rgba(255, 255, 255, 0.03);
+            --accent-gold: #D4AF37;
+            /* Keeping gold for certain highlights */
+            --accent-blue: #0072C6;
+            /* Keeping blue for table highlights */
+
+            /* Animation Tokens */
+            --duration: 250ms;
+            --easing: cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-dark);
+            color: var(--text-primary);
+            line-height: 1.6;
+            overflow-x: hidden;
+            scroll-behavior: smooth;
+        }
+
+        /* Dashboard Footer Style (Permanent Pattern) */
+        .dashboard-bar {
+            display: flex;
+            height: 48px;
+            align-items: center;
+            gap: 20px;
+            background-color: var(--bg-dark);
+            padding: 0 40px;
+            font-size: 0.75rem;
+            letter-spacing: 2px;
+            color: var(--text-primary);
+            border-bottom: 1px solid var(--border);
+            text-transform: uppercase;
+            position: fixed;
+            top: 0;
+            width: 100%;
+            z-index: 100;
+        }
+
+        .dashboard-bar span.separator {
+            width: 1px;
+            height: 16px;
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 40px;
+        }
+
+        /* Animations */
+        .fade-in {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 1s cubic-bezier(0.16, 1, 0.3, 1), transform 1s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .fade-in.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        header {
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            background: linear-gradient(rgba(10, 10, 10, 0.6), rgba(10, 10, 10, 1)), url('welding_robot_hero_1772009528793.png');
+            background-size: cover;
+            background-position: center;
+            text-align: center;
+            margin-top: 48px;
+            /* Offset for dashboard bar */
+        }
+
+        .hero-content h1 {
+            font-size: 5rem;
+            font-weight: 800;
+            letter-spacing: -2px;
+            margin-bottom: 20px;
+            background: var(--text-primary);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-transform: uppercase;
+        }
+
+        .hero-content p {
+            font-size: 1.25rem;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 4px;
+        }
+
+        section {
+            padding: 120px 0;
+            border-bottom: 1px solid var(--border);
+        }
+
+        h2 {
+            font-size: 2.5rem;
+            font-weight: 800;
+            margin-bottom: 60px;
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            text-transform: uppercase;
+            letter-spacing: -1px;
+            color: var(--text-primary);
+        }
+
+        h2::after {
+            content: '';
+            height: 1px;
+            background: var(--border);
+            flex-grow: 1;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 40px;
+        }
+
+        .card {
+            background-color: var(--bg-surface);
+            padding: 40px;
+            border: 1px solid var(--border);
+            border-radius: 4px;
+            transition:
+                transform var(--duration) var(--easing),
+                box-shadow var(--duration) var(--easing),
+                border-color var(--duration) var(--easing);
+            position: relative;
+            backdrop-filter: blur(10px);
+            overflow: hidden;
+            /* For ripple and beam */
+            cursor: pointer;
+        }
+
+        .card:hover {
+            transform: scale(1.02) translateY(-4px);
+            box-shadow:
+                0 20px 40px rgba(0, 0, 0, 0.4),
+                0 0 20px rgba(124, 58, 237, 0.2);
+            /* Soft glow matching gradient */
+            border-color: rgba(255, 255, 255, 0.3);
+        }
+
+        .card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 3px;
+            background: var(--perm-gradient);
+            opacity: 0;
+            transition: opacity 0.4s ease;
+            border-top-left-radius: 4px;
+            border-top-right-radius: 4px;
+        }
+
+        .card:hover::before {
+            opacity: 1;
+        }
+
+        .card h3 {
+            font-size: 1.5rem;
+            margin-bottom: 20px;
+            color: var(--text-primary);
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .card p {
+            color: var(--text-secondary);
+        }
+
+        /* Dashboard Stat Grid (Permanent Guideline) */
+        .stat-grid {
+            display: flex;
+            background: var(--bg-dark);
+            border-top: 1px solid var(--border);
+            border-bottom: 1px solid var(--border);
+            margin-top: 60px;
+        }
+
+        .stat-item {
+            flex: 1;
+            padding: 40px 20px;
+            text-align: center;
+            border-right: 1px solid var(--border);
+        }
+
+        .stat-item:last-child {
+            border-right: none;
+        }
+
+        .stat-value {
+            font-size: 3.5rem;
+            font-weight: 800;
+            background: var(--perm-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            display: block;
+            margin-bottom: 10px;
+            line-height: 1;
+        }
+
+        .stat-label {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            font-weight: 600;
+        }
+
+        /* Tables */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 40px;
+        }
+
+        th,
+        td {
+            padding: 24px;
+            text-align: left;
+            border-bottom: 1px solid var(--border);
+        }
+
+        th {
+            color: var(--text-secondary);
+            font-weight: 600;
+            text-transform: uppercase;
+            font-size: 0.75rem;
+            letter-spacing: 2px;
+        }
+
+        tbody tr {
+            transition: background-color 0.2s ease;
+        }
+
+        tbody tr:hover {
+            background-color: var(--glass);
+        }
+
+        .highlight-row {
+            background: rgba(255, 255, 255, 0.02);
+            position: relative;
+        }
+
+        .highlight-row::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            width: 4px;
+            background: var(--perm-gradient);
+        }
+
+        .badge {
+            padding: 6px 14px;
+            border-radius: 2px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            background: rgba(255, 255, 255, 0.1);
+            color: var(--text-primary);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            display: inline-block;
+            margin: 4px 4px 4px 0;
+            border: 1px solid var(--border);
+        }
+
+        .badge-danger {
+            color: #ff4d4d;
+            border-color: rgba(255, 77, 77, 0.3);
+            background: rgba(255, 77, 77, 0.05);
+        }
+
+        .badge-success {
+            background: var(--perm-gradient);
+            color: white;
+            border: none;
+        }
+
+        /* ROI Box with thematic mask focus */
+        .roi-box {
+            background: var(--bg-surface);
+            padding: 60px;
+            border: 1px solid var(--border);
+            position: relative;
+            overflow: hidden;
+            border-radius: 4px;
+        }
+
+        .roi-box::before {
+            content: 'ROI';
+            position: absolute;
+            top: -20px;
+            right: -20px;
+            font-size: 15rem;
+            font-weight: 900;
+            color: rgba(255, 255, 255, 0.02);
+            pointer-events: none;
+            line-height: 1;
+        }
+
+        /* Gradient bottom info panel applied to ROI box */
+        .roi-box::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 6px;
+            background: var(--perm-gradient);
+        }
+
+        ul {
+            list-style: none;
+        }
+
+        li {
+            padding-left: 24px;
+            position: relative;
+            margin-bottom: 12px;
+            color: var(--text-secondary);
+        }
+
+        li::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 10px;
+            width: 6px;
+            height: 6px;
+            background: var(--perm-gradient);
+            border-radius: 50%;
+        }
+
+        /* Permanent Footer Banner */
+        .footer-banner {
+            padding: 100px 0;
+            background: var(--bg-dark);
+            text-align: center;
+            border-top: 1px solid var(--border);
+            position: relative;
+        }
+
+        .footer-banner::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: var(--perm-gradient);
+            opacity: 0.5;
+        }
+
+        .cta-button {
+            display: inline-block;
+            padding: 20px 48px;
+            background: var(--bg-dark);
+            color: white;
+            text-decoration: none;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-top: 40px;
+            border-radius: 2px;
+            position: relative;
+            z-index: 1;
+            transition: color 0.3s ease;
+            box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.2) inset;
+        }
+
+        .cta-button::before {
+            content: '';
+            position: absolute;
+            top: -2px;
+            left: -2px;
+            right: -2px;
+            bottom: -2px;
+            background: var(--perm-gradient);
+            z-index: -1;
+            border-radius: 4px;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .cta-button:hover::before {
+            opacity: 1;
+        }
+
+        .cta-button:hover {
+            box-shadow: none;
+        }
+
+        /* DNA Red Lines cards */
+        .red-line-card {
+            border: 1px solid rgba(255, 77, 77, 0.3);
+            background: rgba(255, 77, 77, 0.02);
+        }
+
+        .red-line-card:hover {
+            border-color: rgba(255, 77, 77, 0.8);
+            box-shadow: 0 20px 40px rgba(255, 77, 77, 0.1);
+        }
+
+        .red-line-card h3 {
+            color: #ff4d4d;
+        }
+
+        .red-line-card li::before {
+            background: #ff4d4d;
+        }
+
+        /* Specific modifications */
+        .text-gradient {
+            background: var(--perm-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        /* Border Beam Effect */
+        .card::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            border-radius: 4px;
+            padding: 1px;
+            /* Border thickness */
+            background: linear-gradient(var(--duration) var(--easing), transparent, rgba(255, 255, 255, 0.2), transparent);
+            -webkit-mask:
+                linear-gradient(#fff 0 0) content-box,
+                linear-gradient(#fff 0 0);
+            mask:
+                linear-gradient(#fff 0 0) content-box,
+                linear-gradient(#fff 0 0);
+            -webkit-mask-composite: xor;
+            mask-composite: exclude;
+            opacity: 0;
+            transition: opacity var(--duration) var(--easing);
+            pointer-events: none;
+        }
+
+        .card:hover::after {
+            opacity: 1;
+            animation: border-beam 3s linear infinite;
+        }
+
+        @keyframes border-beam {
+            0% {
+                background: conic-gradient(from 0deg at 50% 50%, var(--perm-gradient), transparent 30%);
+            }
+
+            100% {
+                background: conic-gradient(from 360deg at 50% 50%, var(--perm-gradient), transparent 30%);
+            }
+        }
+
+        /* Ripple Effect */
+        .ripple {
+            position: absolute;
+            border-radius: 50%;
+            transform: scale(0);
+            animation: ripple-animation 0.6s linear;
+            background-color: rgba(255, 255, 255, 0.15);
+            pointer-events: none;
+        }
+
+        @keyframes ripple-animation {
+            to {
+                transform: scale(4);
+                opacity: 0;
+            }
+        }
+
+        /* Focus & Accessibility */
+        :focus-visible {
+            outline: 3px solid rgba(124, 58, 237, 0.6);
+            outline-offset: 4px;
+            box-shadow: 0 0 0 4px rgba(124, 58, 237, 0.2);
+            border-radius: 4px;
+        }
+
+        .card:focus-visible {
+            transform: scale(1.02) translateY(-4px);
+            border-color: var(--perm-gradient);
+        }
+
+        /* Advantage Feature Cards */
+        .advantages-list {
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+        }
+
+        .adv-card {
+            display: flex;
+            background: var(--bg-surface);
+            border: 1px solid var(--border);
+            border-radius: 4px;
+            overflow: hidden;
+            transition: all var(--duration) var(--easing);
+        }
+
+        .adv-card:hover {
+            border-color: rgba(255, 255, 255, 0.2);
+            transform: translateX(10px);
+            box-shadow: -10px 10px 30px rgba(0, 0, 0, 0.5);
+            background: rgba(255, 255, 255, 0.03);
+            z-index: 10;
+        }
+
+        .adv-main {
+            padding: 40px;
+            flex: 1;
+            display: flex;
+            gap: 30px;
+        }
+
+        .adv-number {
+            font-size: 5rem;
+            font-weight: 800;
+            line-height: 0.8;
+            color: rgba(255, 255, 255, 0.04);
+            font-variant-numeric: tabular-nums;
+            margin-top: -5px;
+        }
+
+        .adv-content {
+            flex: 1;
+        }
+
+        .adv-title {
+            font-size: 1.25rem;
+            color: var(--text-primary);
+            margin-bottom: 8px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .adv-subtitle {
+            display: block;
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            margin-bottom: 20px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .adv-essence {
+            font-size: 1rem;
+            color: var(--text-primary);
+            line-height: 1.6;
+            margin-bottom: 0;
+        }
+
+        .adv-impact {
+            width: 40%;
+            background: linear-gradient(135deg, rgba(124, 58, 237, 0.1), rgba(124, 58, 237, 0.02));
+            padding: 40px;
+            border-left: 1px solid rgba(124, 58, 237, 0.2);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .adv-impact h4 {
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: #A78BFA;
+            margin-bottom: 12px;
+        }
+
+        .adv-impact p {
+            font-size: 0.95rem;
+            color: var(--text-primary);
+            line-height: 1.6;
+        }
+
+        .adv-impact p strong {
+            color: #fff;
+            background: rgba(124, 58, 237, 0.2);
+            padding: 2px 6px;
+            border-radius: 2px;
+            display: inline-block;
+            margin-bottom: 8px;
+        }
+
+        @media (max-width: 900px) {
+            .adv-card {
+                flex-direction: column;
+            }
+
+            .adv-impact {
+                width: 100%;
+                border-left: none;
+                border-top: 1px solid rgba(124, 58, 237, 0.2);
+            }
+
+            .adv-main {
+                flex-direction: column;
+                gap: 20px;
+            }
+
+            .adv-number {
+                font-size: 3rem;
+            }
+        }
+
+        /* Competitor List */
+        .comp-list {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .comp-header-row {
+            display: grid;
+            grid-template-columns: 2.5fr 2fr 3fr 2.5fr;
+            gap: 20px;
+            padding: 16px 24px;
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: var(--text-secondary);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            margin-bottom: 10px;
+        }
+
+        .comp-row {
+            display: grid;
+            grid-template-columns: 2.5fr 2fr 3fr 2.5fr;
+            gap: 20px;
+            padding: 24px;
+            background: transparent;
+            border: 1px solid transparent;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            align-items: center;
+            transition: all var(--duration) var(--easing);
+            border-radius: 4px;
+        }
+
+        .comp-row:hover {
+            background: rgba(255, 255, 255, 0.02);
+            border-color: rgba(255, 255, 255, 0.1);
+            transform: translateX(10px);
+            box-shadow: -10px 10px 30px rgba(0, 0, 0, 0.3);
+            z-index: 2;
+            position: relative;
+        }
+
+        .comp-row.highlight-row {
+            background: linear-gradient(135deg, rgba(30, 64, 148, 0.2), rgba(124, 58, 237, 0.1));
+            border: 1px solid rgba(124, 58, 237, 0.3);
+            margin-top: 20px;
+        }
+
+        .comp-row.highlight-row:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 40px rgba(124, 58, 237, 0.2);
+            border-color: rgba(124, 58, 237, 0.5);
+        }
+
+        .comp-col-name {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: var(--text-primary);
+        }
+
+        .comp-col-brands {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            line-height: 1.4;
+        }
+
+        .comp-col-pos {
+            font-size: 0.95rem;
+            color: var(--text-primary);
+            line-height: 1.4;
+        }
+
+        .comp-weakness-badge {
+            display: inline-block;
+            padding: 6px 12px;
+            font-size: 0.75rem;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            background: rgba(255, 77, 77, 0.05);
+            color: #ff4d4d;
+            border: 1px solid rgba(255, 77, 77, 0.2);
+            border-radius: 2px;
+        }
+
+        @media (max-width: 900px) {
+            .comp-header-row {
+                display: none;
+            }
+
+            .comp-row {
+                display: flex;
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 12px;
+                background: var(--bg-surface);
+                border: 1px solid var(--border);
+                margin-bottom: 16px;
+                padding: 30px;
+            }
+
+            .comp-row.highlight-row {
+                margin-top: 30px;
+            }
+
+            .comp-col-name::before {
+                content: 'КОМПАНИЯ';
+                font-size: 0.7rem;
+                letter-spacing: 1px;
+                color: var(--text-secondary);
+                display: block;
+                margin-bottom: 4px;
+            }
+
+            .comp-col-brands::before {
+                content: 'БРЕНДЫ';
+                font-size: 0.7rem;
+                letter-spacing: 1px;
+                color: var(--text-secondary);
+                display: block;
+                margin-bottom: 4px;
+            }
+
+            .comp-col-pos::before {
+                content: 'ПОЗИЦИОНИРОВАНИЕ';
+                font-size: 0.7rem;
+                letter-spacing: 1px;
+                color: var(--text-secondary);
+                display: block;
+                margin-bottom: 4px;
+            }
+
+            .comp-col-weak {
+                width: 100%;
+                margin-top: 10px;
+            }
+        }
+
+        /* Reading Progress Circular SVG */
+        .reading-progress-wrap {
+            position: fixed;
+            right: 40px;
+            bottom: 40px;
+            height: 50px;
+            width: 50px;
+            z-index: 1000;
+            border-radius: 50%;
+            background: rgba(10, 10, 10, 0.8);
+            border: 1px solid var(--border);
+            backdrop-filter: blur(10px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 400ms cubic-bezier(0.16, 1, 0.3, 1);
+            pointer-events: none;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+            cursor: pointer;
+        }
+
+        .reading-progress-wrap.visible {
+            opacity: 1;
+            transform: translateY(0);
+            pointer-events: auto;
+        }
+
+        .progress-circle {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            transform: rotate(-90deg);
+        }
+
+        .progress-circle path {
+            stroke: #7C3AED;
+            stroke-width: 4;
+            stroke-dasharray: 308;
+            /* 2 * PI * 49 = 307.87 */
+            stroke-dashoffset: 308;
+            fill: none;
+            transition: stroke-dashoffset 100ms linear;
+        }
+
+        .reading-progress-wrap::after {
+            content: '↑';
+            position: absolute;
+            font-size: 1.2rem;
+            color: var(--text-primary);
+            font-weight: 800;
+        }
+
+        .reading-progress-wrap:hover {
+            box-shadow: 0 0 20px rgba(124, 58, 237, 0.4);
+            border-color: rgba(124, 58, 237, 0.5);
+            transform: translateY(-4px);
+        }
+
+        /* -----------------------
+           MOBILE ADAPTATION 
+           ----------------------- */
+        @media (max-width: 768px) {
+
+            /* Typography & Padding Spacing */
+            h1 {
+                font-size: 2.2rem;
+            }
+
+            h2 {
+                font-size: 1.8rem;
+            }
+
+            h3 {
+                font-size: 1.25rem;
+            }
+
+            body {
+                font-size: 15px;
+            }
+
+            .container {
+                padding: 0 20px;
+            }
+
+            .section-padding {
+                padding: 60px 0;
+            }
+
+            .hero {
+                padding: 60px 20px;
+                text-align: left;
+                align-items: flex-start;
+            }
+
+            .hero h1 {
+                text-align: left;
+            }
+
+            .hero p {
+                text-align: left;
+                font-size: 1.1rem;
+            }
+
+            .cta-button {
+                width: 100%;
+                text-align: center;
+            }
+
+            /* Dashboard Bar */
+            .dashboard-bar {
+                flex-direction: column;
+                align-items: flex-start;
+                height: auto;
+                padding: 15px 20px;
+                gap: 12px;
+            }
+
+            .dashboard-bar .separator {
+                display: none;
+            }
+
+            .dashboard-bar span:last-child {
+                font-size: 0.75rem;
+                line-height: 1.4;
+            }
+
+            /* Layout Grids */
+            .grid {
+                grid-template-columns: 1fr;
+                gap: 20px !important;
+                /* Override larger gaps */
+            }
+
+            .grid-3 {
+                grid-template-columns: 1fr;
+            }
+
+            .stat-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 15px;
+            }
+
+            .stat-value {
+                font-size: 2rem;
+            }
+
+            .stat-label {
+                font-size: 0.8rem;
+            }
+
+            .tech-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .img-grid {
+                grid-template-columns: 1fr;
+            }
+
+            /* Footer */
+            .footer-banner {
+                padding: 60px 20px;
+            }
+
+            .footer-banner>div:first-child {
+                font-size: 1.8rem !important;
+            }
+
+            /* Reading Progress Adjustments */
+            .reading-progress-wrap {
+                right: 20px;
+                bottom: 20px;
+                transform: scale(0.85) translateY(20px);
+            }
+
+            .reading-progress-wrap.visible {
+                transform: scale(0.85) translateY(0);
+            }
+
+            .reading-progress-wrap::after {
+                font-size: 1.5rem;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <!-- SVG Definitions for Gradients -->
+    <svg style="width:0;height:0;position:absolute;" aria-hidden="true" focusable="false">
+        <linearGradient id="perm-gradient-svg" x1="0%" y1="0%" x2="100%" y2="0%">
+            <stop offset="0%" stop-color="#1E4094" />
+            <stop offset="50%" stop-color="#7C3AED" />
+            <stop offset="100%" stop-color="#F472B6" />
+        </linearGradient>
+    </svg>
+
+    <div class="dashboard-bar">
+        <!-- Logo Placeholde (Image with Fallback Text) -->
+        <div style="display: flex; align-items: center; height: 100%;">
+            <img src="logo.svg" alt="ПЕРМАНЕНТ" style="height: 24px; object-fit: contain;"
+                onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
+            <span class="text-gradient"
+                style="font-weight: 900; letter-spacing: 3px; font-size: 1.2rem; display: none; margin-bottom: -2px;">ПЕРМАНЕНТ</span>
+        </div>
+        <span class="separator"></span>
+        <span>СТРАТЕГИЯ РАЗВИТИЯ: РОБОТИЗАЦИЯ СВАРОЧНОГО ПРОИЗВОДСТВА</span>
+        <span class="separator"></span>
+        <span>ВЕРСИЯ: 1.3 | ФЕВРАЛЬ 2026</span>
+        <span class="separator"></span>
+        <span class="text-gradient" style="font-weight: 800; margin-left: auto;">СТРОГО КОНФИДЕНЦИАЛЬНО</span>
+    </div>
+
+    <header>
+        <div class="hero-content fade-in">
+            <p style="margin-bottom: 20px;">АО «Фирма «ПЕРМАНЕНТ К&М»</p>
+            <h1>СТРАТЕГИЯ 2026</h1>
+            <p>Масштабирование роботизации сварочного производства</p>
+        </div>
+    </header>
+
+    <div class="container">
+
+        <!-- SECTION 1: IDENTITY -->
+        <section id="identity" class="fade-in">
+            <h2>КТО МЫ</h2>
+            <div class="grid">
+                <div class="card" tabindex="0">
+                    <h3>КОМПАНИЯ</h3>
+                    <p>Инжиниринговая компания с 1993 года. Реализуем проекты роботизации полного цикла — от единичных
+                        сварочных ячеек до многороботных производственных линий.</p>
+                </div>
+                <div class="card" tabindex="0">
+                    <h3>МАТЕРИАЛЬНАЯ БАЗА</h3>
+                    <p>Собственный склад в Москве с постоянным запасом роботов и запчастей. Детали и комплектующие — в
+                        наличии, без задержек на таможне.</p>
+                </div>
+                <div class="card" tabindex="0">
+                    <h3>РАБОТА С КЛИЕНТОМ</h3>
+                    <p>С первого звонка — инженер-практик, не менеджер. Бесплатный аудит производства (5 дней), расчёт
+                        окупаемости и финансовая модель до подписания договора.</p>
+                </div>
+            </div>
+            <div class="stat-grid fade-in">
+                <div class="stat-item">
+                    <span class="stat-value">32</span>
+                    <span class="stat-label">Года на рынке</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-value">1500+</span>
+                    <span class="stat-label">Клиентов группы</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-value">1,5 млрд</span>
+                    <span class="stat-label">Оборот (₽)</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-value">22</span>
+                    <span class="stat-label">Инженера в штате</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION 2: VALUE PROP -->
+        <section id="value" class="fade-in">
+            <h2>ЧТО МЫ ДАЁМ КЛИЕНТУ</h2>
+            <div class="roi-box fade-in">
+                <div style="max-width: 600px; position: relative; z-index: 2;">
+                    <h3
+                        style="font-size: 2rem; margin-bottom: 20px; color: var(--text-primary); text-transform: uppercase;">
+                        РЕЗУЛЬТАТ, К КОТОРОМУ МЫ ПРИВОДИМ</h3>
+                    <p style="font-size: 1.2rem; margin-bottom: 30px; color: var(--text-secondary);">Роботизированный
+                        участок работает в 2–3 смены без квалифицированных сварщиков, выдаёт воспроизводимый
+                        бездефектный шов и окупается за 18–24 месяца.</p>
+                    <ul style="margin-bottom: 30px;">
+                        <li>Брак снижается с 7% до 0,5%</li>
+                        <li>Скорость сварки растёт в 2–5 раз</li>
+                        <li>Одна ячейка заменяет 2–3 сварщика</li>
+                    </ul>
+                    <div class="badge"
+                        style="background: rgba(255, 255, 255, 0.1); border-color: rgba(255,255,255,0.2);">ЕДИНСТВЕННОЕ
+                        НА РЫНКЕ: бесплатный аудит с расчётом окупаемости за 5 дней</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION 2.5: STRATEGIC POSITIONING & USPs -->
+        <section id="positioning" class="fade-in">
+            <h2>НАШИ ПРЕИМУЩЕСТВА</h2>
+            <div class="grid" style="margin-bottom: 60px;">
+                <div class="card" style="grid-column: span 2;">
+                    <h3 class="text-gradient">СТРАТЕГИЯ: ПАРТНЁР ПО РЕЗУЛЬТАТУ, А НЕ ПРОДАВЕЦ ОБОРУДОВАНИЯ</h3>
+                    <p>Наш целевой клиент — руководитель или технический директор предприятия, которому нужно
+                        <strong>решить проблему производства</strong>, а не просто купить робота. Пока конкуренты
+                        продают характеристики (у всех они схожи), мы предлагаем финансовые гарантии, полное
+                        сопровождение внедрения и снижение рисков для бизнеса. Мы берём на себя ответственность за
+                        <strong>достижение оговорённых показателей</strong> — и фиксируем это в договоре.
+                    </p>
+                </div>
+            </div>
+
+            <p
+                style="color: var(--text-secondary); margin-bottom: 20px; text-transform: uppercase; letter-spacing: 1px; font-weight: 600;">
+                Ключевые преимущества для рекламных кампаний:</p>
+            <div class="advantages-list fade-in">
+
+                <!-- Advantage 1 -->
+                <div class="adv-card">
+                    <div class="adv-main">
+                        <div class="adv-number">01</div>
+                        <div class="adv-content">
+                            <h3 class="adv-title">Бесплатный аудит и расчёт окупаемости</h3>
+                            <span class="adv-subtitle">Инженер-практик, финансовая модель за 5 дней — бесплатно</span>
+                            <p class="adv-essence">Сначала показываем экспертизу, потом говорим о цене. Инженер выходит
+                                на связь с первого звонка, расчёт окупаемости — до договора.</p>
+                        </div>
+                    </div>
+                    <div class="adv-impact">
+                        <h4>Почему это важно</h4>
+                        <p><strong>Убираем главный страх</strong><br>Руководитель производства боится, что ему
+                            «продадут» ненужное. Мы даём ценный результат бесплатно — и этим отсекаем конкурентов.</p>
+                    </div>
+                </div>
+
+                <!-- Advantage 2 -->
+                <div class="adv-card">
+                    <div class="adv-main">
+                        <div class="adv-number">02</div>
+                        <div class="adv-content">
+                            <h3 class="adv-title">Внедрение под ключ</h3>
+                            <span class="adv-subtitle">Не просто поставка робота, а запущенный процесс</span>
+                            <p class="adv-essence">Гарантируем результат — что ячейка сваривает вашу деталь так, как
+                                нужно. Возможность проверить это до покупки в нашем демонстрационном зале.</p>
+                        </div>
+                    </div>
+                    <div class="adv-impact">
+                        <h4>Почему это важно</h4>
+                        <p><strong>Удар по дешёвому сегменту</strong><br>Заводы регулярно обжигаются на «коробочных»
+                            решениях, которые потом стоят мёртвым грузом. Мы берём ответственность за запуск.</p>
+                    </div>
+                </div>
+
+                <!-- Advantage 3 -->
+                <div class="adv-card">
+                    <div class="adv-main">
+                        <div class="adv-number">03</div>
+                        <div class="adv-content">
+                            <h3 class="adv-title">Финансовые выгоды (ФРП)</h3>
+                            <span class="adv-subtitle"><span
+                                    style="color: #ff4d4d; font-weight: bold; border-bottom: 1px dotted #ff4d4d;"
+                                    title="Требует согласования">Субсидия 20% ⚠️</span> и окупаемость 18–24 мес.</span>
+                            <p class="adv-essence">Робот — это инвестиция, а не трата. Помогаем оформить пакет
+                                документов для субсидии Фонда развития промышленности.</p>
+                        </div>
+                    </div>
+                    <div class="adv-impact">
+                        <h4>Почему это важно</h4>
+                        <p><strong>Говорим на языке бизнес-выгоды</strong><br>Технические характеристики нужны инженеру,
+                            а директору — срок возврата вложений и экономия на ФОТ.</p>
+                    </div>
+                </div>
+
+                <!-- Advantage 4 -->
+                <div class="adv-card">
+                    <div class="adv-main">
+                        <div class="adv-number">04</div>
+                        <div class="adv-content">
+                            <h3 class="adv-title">Показатели зафиксированы в договоре</h3>
+                            <span class="adv-subtitle">Платите за результат, а не за оборудование</span>
+                            <p class="adv-essence">Вносим измеримые показатели (время такта, процент брака) в договор.
+                                Тестируем и сдаём участок именно по этим критериям.</p>
+                        </div>
+                    </div>
+                    <div class="adv-impact">
+                        <h4>Почему это важно</h4>
+                        <p><strong>Снимаем главный риск</strong><br>Юридически связываем оплату с тем, что процесс
+                            работает. Это строит мгновенное доверие со стороны клиента.</p>
+                    </div>
+                </div>
+
+                <!-- Advantage 5 -->
+                <div class="adv-card">
+                    <div class="adv-main">
+                        <div class="adv-number">05</div>
+                        <div class="adv-content">
+                            <h3 class="adv-title">Репутация и опыт</h3>
+                            <span class="adv-subtitle">На рынке с 1993 года. Проекты от ячеек до линий</span>
+                            <p class="adv-essence">Беремся за проекты любого масштаба. За нашими плечами — опыт на 1
+                                500+ предприятиях России и стран СНГ.</p>
+                        </div>
+                    </div>
+                    <div class="adv-impact">
+                        <h4>Почему это важно</h4>
+                        <p><strong>Не пустой стартап, а зрелая компания</strong><br>30 лет в промышленном инжиниринге —
+                            это аргумент для холдингов и крупных машиностроительных заводов.</p>
+                    </div>
+                </div>
+
+                <!-- Advantage 6 -->
+                <div class="adv-card">
+                    <div class="adv-main">
+                        <div class="adv-number">06</div>
+                        <div class="adv-content">
+                            <h3 class="adv-title">Полный цикл работ</h3>
+                            <span class="adv-subtitle">Ведём проект от аудита до сдачи</span>
+                            <p class="adv-essence">От первого аудита до запуска готового процесса. Мы — инжиниринговая
+                                компания, не продавцы со склада.</p>
+                        </div>
+                    </div>
+                    <div class="adv-impact">
+                        <h4>Почему это важно</h4>
+                        <p><strong>Забираем всю головную боль</strong><br>Проектирование, закупки, логистика, монтаж —
+                            всё на нас. Клиент занимается производством, а не стройкой.</p>
+                    </div>
+                </div>
+
+                <!-- Advantage 7 -->
+                <div class="adv-card">
+                    <div class="adv-main">
+                        <div class="adv-number">07</div>
+                        <div class="adv-content">
+                            <h3 class="adv-title">Склад и логистика</h3>
+                            <span class="adv-subtitle">Собственный склад в Москве</span>
+                            <p class="adv-essence">Роботы и запчасти в наличии. Прямые поставки комплектующих без
+                                задержек.</p>
+                        </div>
+                    </div>
+                    <div class="adv-impact">
+                        <h4>Почему это важно</h4>
+                        <p><strong>Защита от простоя</strong><br>Если что-то случится после запуска — склад в Москве
+                            позволяет решить проблему быстро, а не ждать поставок неделями.</p>
+                    </div>
+                </div>
+
+            </div>
+
+            <div style="margin-top: 60px;" class="fade-in">
+                <h3 style="margin-bottom: 20px; font-size: 1.5rem;" class="text-gradient">ГОТОВЫЕ ТЕКСТЫ ДЛЯ РЕКЛАМЫ
+                </h3>
+                <p style="color: var(--text-secondary); margin-bottom: 30px;">Рабочие формулировки для Яндекс.Директ,
+                    собранные на основе ключевых преимуществ.</p>
+
+                <div class="grid" style="gap: 20px;">
+                    <div class="card" style="padding: 24px;">
+                        <h4
+                            style="margin-bottom: 12px; font-size: 1rem; color: var(--text-primary); border-bottom: 1px solid var(--border); padding-bottom: 8px;">
+                            Объявление 1 — Бесплатный аудит</h4>
+                        <ul style="font-size: 0.9rem;">
+                            <li style="margin-bottom: 6px;">Разработаем коммерческое предложение и 3D-модель ячейки за 5
+                                дней.</li>
+                            <li style="margin-bottom: 6px;">Считаем окупаемость до подписания договора.</li>
+                            <li>С первого звонка — инженер-практик.</li>
+                        </ul>
+                    </div>
+
+                    <div class="card" style="padding: 24px;">
+                        <h4
+                            style="margin-bottom: 12px; font-size: 1rem; color: var(--text-primary); border-bottom: 1px solid var(--border); padding-bottom: 8px;">
+                            Объявление 2 — Внедрение под ключ</h4>
+                        <ul style="font-size: 0.9rem;">
+                            <li style="margin-bottom: 6px;">Не навязываем роботов из каталога. Проектируем под ваше
+                                техническое задание.</li>
+                            <li style="margin-bottom: 6px;">Гарантируем качество шва в договоре. Обучаем технологов.
+                            </li>
+                            <li>Полный цикл: от аудита до сдачи готового процесса.</li>
+                        </ul>
+                    </div>
+
+                    <div class="card" style="padding: 24px;">
+                        <h4
+                            style="margin-bottom: 12px; font-size: 1rem; color: var(--text-primary); border-bottom: 1px solid var(--border); padding-bottom: 8px;">
+                            Объявление 3 — Кадры и финансы</h4>
+                        <ul style="font-size: 0.9rem;">
+                            <li style="margin-bottom: 6px;">Один комплекс варит за троих в три смены — закроет кадровый
+                                голод.</li>
+                            <li><span
+                                    style="color: var(--danger); font-weight: bold; border-bottom: 1px dotted var(--danger);"
+                                    title="Требует согласования">Вернём 20% стоимости через субсидию ФРП. ⚠️</span></li>
+                        </ul>
+                    </div>
+
+                    <div class="card" style="padding: 24px;">
+                        <h4
+                            style="margin-bottom: 12px; font-size: 1rem; color: var(--text-primary); border-bottom: 1px solid var(--border); padding-bottom: 8px;">
+                            Объявление 4 — Репутация</h4>
+                        <ul style="font-size: 0.9rem;">
+                            <li style="margin-bottom: 6px;">На рынке с 1993 года. Доверяют ведущие машиностроительные
+                                предприятия России.</li>
+                            <li style="margin-bottom: 6px;">Проекты от одиночных ячеек до многороботных линий.</li>
+                            <li>Собственные инженеры и лаборатория.</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION 2.6: CREATIVE CONCEPTS -->
+        <section id="creative-concepts" class="fade-in">
+            <h2>КРЕАТИВНЫЕ КОНЦЕПЦИИ (ЯНДЕКС.ДИРЕКТ)</h2>
+            <p style="color: var(--text-secondary); margin-bottom: 40px; font-size: 1.1rem;">Описание разработанных
+                концепций и обоснование их эффективности для целевой аудитории.</p>
+
+            <div class="grid" style="gap: 30px;">
+                <!-- Concept 10 -->
+                <div class="card" style="padding: 0; overflow: hidden; display: flex; flex-direction: column;">
+                    <img src="tinified/Аудит цеха.png" alt="Лицо Инженера"
+                        style="width: 100%; height: auto; display: block; border-bottom: 1px solid var(--border);">
+                    <div style="padding: 30px; flex-grow: 1;">
+                        <span class="badge" style="margin-bottom: 15px;">Активация доверия</span>
+                        <h3 class="text-gradient" style="font-size: 1.3rem;">Концепция 10: «Лицо Инженера»</h3>
+                        <p style="margin-bottom: 15px; font-size: 0.95rem;"><strong>Суть:</strong> B2B — это продажи
+                            P2P. Наше УТП — живые инженеры, а не продавцы оборудования.</p>
+                        <p style="color: var(--text-secondary); font-size: 0.9rem;"><strong>Почему сработает:</strong>
+                            Лицо специалиста феноменально выделяется. Зрительный контакт пробивает рекламную слепоту и
+                            формирует подсознательное доверие.</p>
+                    </div>
+                </div>
+
+                <!-- Concept 8 -->
+                <div class="card" style="padding: 0; overflow: hidden; display: flex; flex-direction: column;">
+                    <img src="tinified/Непровары.png" alt="Контраст: Брак vs Идеал"
+                        style="width: 100%; height: auto; display: block; border-bottom: 1px solid var(--border);">
+                    <div style="padding: 30px; flex-grow: 1;">
+                        <span class="badge" style="margin-bottom: 15px;">Бьем в Технологов</span>
+                        <h3 class="text-gradient" style="font-size: 1.3rem;">Концепция 8: «Брак vs Идеал»</h3>
+                        <p style="margin-bottom: 15px; font-size: 0.95rem;"><strong>Суть:</strong> Визуализация главного
+                            KPI — отсутствия брака через наглядный формат «До / После».</p>
+                        <p style="color: var(--text-secondary); font-size: 0.9rem;"><strong>Почему сработает:</strong>
+                            Мозг мгновенно считывает контраст. Чистая стопка деталей — лучшая визуализация
+                            профессионального счастья технолога.</p>
+                    </div>
+                </div>
+
+                <!-- Concept 7 -->
+                <div class="card" style="padding: 0; overflow: hidden; display: flex; flex-direction: column;">
+                    <img src="tinified/Проект ячейки.png" alt="Белые перчатки"
+                        style="width: 100%; height: auto; display: block; border-bottom: 1px solid var(--border);">
+                    <div style="padding: 30px; flex-grow: 1;">
+                        <span class="badge" style="margin-bottom: 15px;">Премиальный EPCM-подход</span>
+                        <h3 class="text-gradient" style="font-size: 1.3rem;">Концепция 7: «Белые перчатки»</h3>
+                        <p style="margin-bottom: 15px; font-size: 0.95rem;"><strong>Суть:</strong> Отстройка от обычных
+                            продавцов. Демонстрация премиального сервиса интеграции «под ключ».</p>
+                        <p style="color: var(--text-secondary); font-size: 0.9rem;"><strong>Почему сработает:</strong> В
+                            суровой металлообработке чистота и аккуратность ассоциируются с высокой компетенцией. Посыл:
+                            «Сделаем всё без головной боли».</p>
+                    </div>
+                </div>
+
+                <!-- Concept 2 -->
+                <div class="card" style="padding: 0; overflow: hidden; display: flex; flex-direction: column;">
+                    <img src="tinified/Снижаем брак1.png" alt="Абстрактная макро-эстетика"
+                        style="width: 100%; height: auto; display: block; border-bottom: 1px solid var(--border);">
+                    <div style="padding: 30px; flex-grow: 1;">
+                        <span class="badge" style="margin-bottom: 15px;">Бьем в Главного сварщика</span>
+                        <h3 class="text-gradient" style="font-size: 1.3rem;">Концепция 2: «Макро-эстетика»</h3>
+                        <p style="margin-bottom: 15px; font-size: 0.95rem;"><strong>Суть:</strong> Идеальный
+                            бездефектный шов как настоящее искусство для профессионалов.</p>
+                        <p style="color: var(--text-secondary); font-size: 0.9rem;"><strong>Почему сработает:</strong> В
+                            переполненной желтыми роботами ленте макро-эстетика металла моментально цепляет глаз 100%
+                            практиков.</p>
+                    </div>
+                </div>
+
+                <!-- Concept 3 -->
+                <div class="card" style="padding: 0; overflow: hidden; display: flex; flex-direction: column;">
+                    <img src="tinified/Ищете сварщиков.png" alt="Пустое рабочее место"
+                        style="width: 100%; height: auto; display: block; border-bottom: 1px solid var(--border);">
+                    <div style="padding: 30px; flex-grow: 1;">
+                        <span class="badge" style="margin-bottom: 15px;">Триггер «Кадровый голод»</span>
+                        <h3 class="text-gradient" style="font-size: 1.3rem;">Концепция 3: «Пустое место»</h3>
+                        <p style="margin-bottom: 15px; font-size: 0.95rem;"><strong>Суть:</strong> Давим на самую острую
+                            боль рынка — полное отсутствие сварщиков.</p>
+                        <p style="color: var(--text-secondary); font-size: 0.9rem;"><strong>Почему сработает:</strong>
+                            Мощный, эмоциональный подход, бьющий точно в цель руководителям, уставшим сутками искать
+                            людей.</p>
+                    </div>
+                </div>
+
+                <!-- Concept 1 -->
+                <div class="card" style="padding: 0; overflow: hidden; display: flex; flex-direction: column;">
+                    <img src="tinified/ROI.png" alt="Деньги и Чертежи"
+                        style="width: 100%; height: auto; display: block; border-bottom: 1px solid var(--border);">
+                    <div style="padding: 30px; flex-grow: 1;">
+                        <span class="badge" style="margin-bottom: 15px;">Бьем в ЛПР</span>
+                        <h3 class="text-gradient" style="font-size: 1.3rem;">Концепция 1: «Деньги и Чертежи»</h3>
+                        <p style="margin-bottom: 15px; font-size: 0.95rem;"><strong>Суть:</strong> Директор покупает не
+                            станок, а инвестиционный актив, закрывающий проблему кадров.</p>
+                        <p style="color: var(--text-secondary); font-size: 0.9rem;"><strong>Почему сработает:</strong>
+                            Выглядит как дорогой IT-продукт. Вызывает ассоциации с расчетами, финансами и инженерной
+                            точностью.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION 3: MARKET -->
+        <section id="market" class="fade-in">
+            <h2>ПОЛНЫЙ ЛАНДШАФТ КОНКУРЕНТОВ</h2>
+            <p style="color: var(--text-secondary); margin-bottom: 40px;">Анализ ТОП-10 игроков рынка. Почти все коллеги
+                по цеху фокусируются на «железе», в то время как ПЕРМАНЕНТ закрывает боли бизнеса.</p>
+
+            <div class="comp-list">
+                <!-- Header -->
+                <div class="comp-header-row">
+                    <div>КОМПАНИЯ</div>
+                    <div>БРЕНДЫ</div>
+                    <div>ПОЗИЦИОНИРОВАНИЕ / ВАЙБ</div>
+                    <div>ГЛАВНАЯ СЛАБОСТЬ</div>
+                </div>
+
+                <!-- Competitors -->
+                <div class="comp-row fade-in">
+                    <div class="comp-col-name">Вектор Групп</div>
+                    <div class="comp-col-brands">KUKA, TOR</div>
+                    <div class="comp-col-pos">Инновации и надежность</div>
+                    <div class="comp-col-weak"><span class="comp-weakness-badge">Только оборудование</span></div>
+                </div>
+
+                <div class="comp-row fade-in">
+                    <div class="comp-col-name">Technored</div>
+                    <div class="comp-col-brands">REDWELD</div>
+                    <div class="comp-col-pos">«Коробочные» решения №1</div>
+                    <div class="comp-col-weak"><span class="comp-weakness-badge">Коробки без интеграции</span></div>
+                </div>
+
+                <div class="comp-row fade-in">
+                    <div class="comp-col-name">Дельта-Свар</div>
+                    <div class="comp-col-brands">Yaskawa, KUKA, Fanuc</div>
+                    <div class="comp-col-pos">Инженерный портал</div>
+                    <div class="comp-col-weak"><span class="comp-weakness-badge">Нет гарантии KPI</span></div>
+                </div>
+
+                <div class="comp-row fade-in">
+                    <div class="comp-col-name">SMD</div>
+                    <div class="comp-col-brands">GSX, GSK, Robaxis</div>
+                    <div class="comp-col-pos">Лидер в автоматизации</div>
+                    <div class="comp-col-weak"><span class="comp-weakness-badge">Нет ROI и лид-магнита</span></div>
+                </div>
+
+                <div class="comp-row fade-in">
+                    <div class="comp-col-name">Tweld</div>
+                    <div class="comp-col-brands">GSX, MGT</div>
+                    <div class="comp-col-pos">Гипермаркет решений</div>
+                    <div class="comp-col-weak"><span class="comp-weakness-badge">Магазин, а не партнер</span></div>
+                </div>
+
+                <div class="comp-row fade-in">
+                    <div class="comp-col-name">CRP Automation</div>
+                    <div class="comp-col-brands">CRP</div>
+                    <div class="comp-col-pos">Доступное массовое железо</div>
+                    <div class="comp-col-weak"><span class="comp-weakness-badge">Фокус на бренд, не на аудит</span>
+                    </div>
+                </div>
+
+                <div class="comp-row fade-in">
+                    <div class="comp-col-name">Rock System</div>
+                    <div class="comp-col-brands">QJAR, Fanuc, KUKA</div>
+                    <div class="comp-col-pos">Машиностроительный вайб</div>
+                    <div class="comp-col-weak"><span class="comp-weakness-badge">Нет фин. модели (ROI)</span></div>
+                </div>
+
+                <div class="comp-row fade-in">
+                    <div class="comp-col-name">Рутектор</div>
+                    <div class="comp-col-brands">FANUC</div>
+                    <div class="comp-col-pos">Стабильный e-commerce</div>
+                    <div class="comp-col-weak"><span class="comp-weakness-badge">Продажа «с полки»</span></div>
+                </div>
+
+                <div class="comp-row fade-in">
+                    <div class="comp-col-name">АИМ (Росатом)</div>
+                    <div class="comp-col-brands">АИМ</div>
+                    <div class="comp-col-pos">Гос-инновации</div>
+                    <div class="comp-col-weak"><span class="comp-weakness-badge">Сложность процедур</span></div>
+                </div>
+
+                <div class="comp-row fade-in">
+                    <div class="comp-col-name">AMN Инжиниринг</div>
+                    <div class="comp-col-brands">АМН, ВИОНТ</div>
+                    <div class="comp-col-pos">Капитализация на резке</div>
+                    <div class="comp-col-weak"><span class="comp-weakness-badge">Узкая специализация</span></div>
+                </div>
+
+                <!-- Highlight Row -->
+                <div class="comp-row highlight-row fade-in">
+                    <div class="comp-col-name"><strong class="text-gradient"
+                            style="font-weight: 800; font-size: 1.3rem;">ПЕРМАНЕНТ</strong></div>
+                    <div class="comp-col-brands"><strong style="color: #fff;">РОБОПРО, Turin + 89 брендов</strong></div>
+                    <div class="comp-col-pos"><strong style="color: #fff;">Бизнес-партнер: Результат и KPI</strong>
+                    </div>
+                    <div class="comp-col-weak" style="display: flex; gap: 8px; flex-wrap: wrap;">
+                        <span class="badge badge-success">Аудит + ROI за 5 дней</span>
+                        <span class="badge badge-success">EPCM Под Ключ</span>
+                        <span class="badge badge-success">Склад класса «А»</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="grid" style="margin-top: 60px;">
+                <div class="card" tabindex="0">
+                    <h3 class="text-gradient">НАШЕ КЛЮЧЕВОЕ ОТЛИЧИЕ</h3>
+                    <p>Единственный на рынке бесплатный аудит производства с расчётом окупаемости за 5 дней. Мы не
+                        просто поставляем роботов — мы встраиваем их в производственный и финансовый процесс
+                        предприятия.</p>
+                </div>
+                <div class="card" tabindex="0">
+                    <h3>ВЫВОД АНАЛИЗА</h3>
+                    <p>Рынок перегружен продавцами оборудования. Катастрофически не хватает профессиональных
+                        инжиниринговых компаний, готовых отвечать за конечный результат на производстве.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION 4: PROCESS -->
+        <section id="process" class="fade-in">
+            <h2>КАК МЫ РАБОТАЕМ</h2>
+            <div class="grid">
+                <div class="card" tabindex="0">
+                    <h3>01. АУДИТ И РАСЧЁТ</h3>
+                    <p>Бесплатный аудит производства за 5 дней, расчёт окупаемости и финансовая модель — до подписания
+                        договора. С первого звонка — инженер.</p>
+                </div>
+                <div class="card" tabindex="0">
+                    <h3>02. ПРОЕКТИРОВАНИЕ</h3>
+                    <p>Проектирование и компьютерная симуляция робототехнической ячейки под ваш техпроцесс.
+                        Комплектующие — со склада в Москве.</p>
+                </div>
+                <div class="card" tabindex="0">
+                    <h3>03. ЗАПУСК</h3>
+                    <p>Монтаж, наладка и тестирование до получения показателей, зафиксированных в договоре. Обучение
+                        персонала.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION 5: TEAM & ASSETS -->
+        <section id="assets" class="fade-in">
+            <h2>ИНФРАСТРУКТУРА И ПАРТНЁРЫ</h2>
+            <p style="color: var(--text-secondary); margin-bottom: 40px; font-size: 1.1rem;">Мы не торгуем роботами из
+                офиса. За нами — реальная инженерная база, лаборатории и собственное производство.</p>
+
+            <div class="grid" style="gap: 20px;">
+                <div class="card" style="padding: 30px;">
+                    <h3 style="font-size: 1.25rem;">ИНФРАСТРУКТУРА</h3>
+                    <ul style="font-size: 0.95rem;">
+                        <li style="margin-bottom: 8px;">Лаборатория в Москве (200 м²)</li>
+                        <li style="margin-bottom: 8px;">Производство и лаборатория в Гомеле (600 м²)</li>
+                        <li>География: вся Россия + Беларусь, Казахстан, Узбекистан</li>
+                    </ul>
+                </div>
+                <div class="card" style="padding: 30px;">
+                    <h3 style="font-size: 1.25rem;">КОМПЕТЕНЦИИ И ОПЫТ</h3>
+                    <ul style="font-size: 0.95rem;">
+                        <li style="margin-bottom: 8px;">Более 500 реализованных проектов</li>
+                        <li style="margin-bottom: 8px;">Опыт интеграции: Fanuc, KUKA, ABB, Yaskawa, UR и др.</li>
+                        <li>В штате 49 сотрудников (из них 22 инженера)</li>
+                    </ul>
+                </div>
+                <div class="card" style="padding: 30px;">
+                    <h3 style="font-size: 1.25rem;">ПАРТНЕРСТВА</h3>
+                    <ul style="font-size: 0.95rem;">
+                        <li style="margin-bottom: 8px;">Официальный дилер 89 мировых брендов (вкл. РОБОПРО)</li>
+                        <li style="margin-bottom: 8px;">Сертифицированный интегратор Turin</li>
+                        <li>Государственная поддержка: Гранты Фонда Содействия Инновациям</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION 6: RED LINES -->
+        <section id="dna" class="fade-in">
+            <h2>КРАСНЫЕ ЛИНИИ 🚫</h2>
+            <p style="color: var(--text-secondary); margin-bottom: 40px; font-size: 1.1rem;">Главный фильтр всех
+                решений. Если клиент или задача не соответствует этому манифесту — мы отказываемся от сделки.</p>
+
+            <div class="grid" style="gap: 30px;">
+                <div class="card red-line-card" tabindex="0">
+                    <h3>КЛИЕНТОВ НЕ БЕРЁМ</h3>
+                    <ul>
+                        <li>Единичное производство без повторяемой номенклатуры — окупаемость не сойдётся.</li>
+                        <li>Клиент хочет «просто робота» без внедрения — это создаст ему проблему, а не решит её.</li>
+                        <li>Площадка не готова, и клиент не намерен её готовить.</li>
+                        <li>Внутренние конфликты на предприятии. Нет ответственного за проект со стороны клиента.</li>
+                    </ul>
+                </div>
+
+                <div class="card red-line-card">
+                    <h3>КАЧЕСТВО НЕ ОБСУЖДАЕТСЯ</h3>
+                    <ul>
+                        <li>Говорим честно до договора, если решение не подходит — даже ценой потери сделки.</li>
+                        <li>Никакой поставки оборудования без проектирования техпроцесса.</li>
+                        <li>Запрет на выбор неподходящего типа сварки ради снижения цены.</li>
+                    </ul>
+                </div>
+
+                <div class="card red-line-card">
+                    <h3>РЕПУТАЦИЯ — НЕ ПОД УГРОЗУ</h3>
+                    <ul>
+                        <li>Не обещаем конкретную окупаемость без проведения реального аудита.</li>
+                        <li>Не работаем без согласованного технического задания и зафиксированных показателей в
+                            договоре.</li>
+                        <li>Соблюдаем соглашения о конфиденциальности с клиентами.</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION 7: GOALS -->
+        <section id="goals" style="border-bottom: none;" class="fade-in">
+            <h2>СТРАТЕГИЧЕСКИЕ ЦЕЛИ 2026</h2>
+            <div class="stat-grid">
+                <div class="stat-item">
+                    <span class="stat-value">220 млн</span>
+                    <span class="stat-label">Выручка (₽)</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-value">12–15</span>
+                    <span class="stat-label">Сделок в год</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-value">≤ 20 тыс.</span>
+                    <span class="stat-label">Стоимость заявки (₽)</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-value">≥ 15%</span>
+                    <span class="stat-label">Операционная прибыль</span>
+                </div>
+            </div>
+
+            <div class="grid" style="margin-top: 60px;">
+                <div class="card">
+                    <h3>ОТКУДА БЕРЁМ КЛИЕНТОВ</h3>
+                    <ol style="color: var(--text-secondary); padding-left: 20px;">
+                        <li style="margin-bottom: 10px;">База клиентов группы (1 500+) — персональная рассылка с
+                            предложением бесплатного аудита</li>
+                        <li style="margin-bottom: 10px;">Яндекс.Директ — горячий коммерческий трафик по целевым запросам
+                        </li>
+                        <li style="margin-bottom: 10px;">Брендовые кампании РОБОПРО и Turin</li>
+                    </ol>
+                </div>
+                <div class="card">
+                    <h3>ЧТО ДЕЛАЕМ В 2026 ГОДУ</h3>
+                    <ul style="color: var(--text-secondary);">
+                        <li>Запуск демонстрационного зала (2-й квартал 2026).</li>
+                        <li>Разработка программы пилотных проектов для новых клиентов.</li>
+                        <li>Запуск трёх уровней сервисного обслуживания.</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+    </div>
+
+    <div class="footer-banner fade-in">
+        <div
+            style="font-size: 2.5rem; font-weight: 800; color: var(--text-primary); margin-bottom: 15px; text-transform: uppercase; line-height: 1.2;">
+            ИНВЕСТИРУЕМ В ТЕХНОЛОГИЧЕСКОЕ ЛИДЕРСТВО
+        </div>
+        <p
+            style="color: var(--text-secondary); text-transform: uppercase; letter-spacing: 2px; font-size: 0.9rem; margin-bottom: 50px;">
+            СТРАТЕГИЧЕСКИЙ ОТЧЕТ ДЛЯ СОВЕТА ДИРЕКТОРОВ АО «ФИРМА «ПЕРМАНЕНТ К&М»
+        </p>
+
+        <div class="fade-in"
+            style="padding-top: 30px; width: 100%; max-width: 600px; margin: 0 auto; display: flex; flex-direction: column; align-items: center; gap: 10px; transition-delay: 100ms;">
+            <div style="display: flex; align-items: center; justify-content: center; gap: 12px; flex-wrap: wrap;">
+                <span
+                    style="font-size: 0.8rem; color: var(--text-secondary); text-transform: uppercase; letter-spacing: 2px;">АВТОР
+                    ИССЛЕДОВАНИЯ:</span>
+                <strong
+                    style="font-size: 1.1rem; color: var(--text-primary); letter-spacing: 1px; border-bottom: 1px solid rgba(124, 58, 237, 0.4); padding-bottom: 2px;">АЛЕКСЕЙ
+                    ТУЗОВ</strong>
+            </div>
+            <div
+                style="font-size: 0.7rem; color: var(--text-secondary); text-transform: uppercase; letter-spacing: 2px; opacity: 0.6; margin-top: 5px;">
+                МАРКЕТИНГ И АНАЛИТИКА ПЕРМАНЕНТ К&М | ФЕВРАЛЬ 2026
+            </div>
+        </div>
+    </div>
+
+    <!-- Reading Progress Circular SVG Indicator -->
+    <div class="reading-progress-wrap">
+        <svg class="progress-circle" viewBox="-1 -1 102 102">
+            <path d="M50,1 a49,49 0 0,1 0,98 a49,49 0 0,1 0,-98" />
+        </svg>
+    </div>
+
+    <!-- Interactions -->
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            // Intersection Observer for fade-in
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('visible');
+                    }
+                });
+            }, { threshold: 0.1, rootMargin: "0px 0px -50px 0px" });
+
+            document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+
+            // Ripple Effect Logic
+            const createRipple = (e) => {
+                const button = e.currentTarget;
+                const circle = document.createElement("span");
+                const diameter = Math.max(button.clientWidth, button.clientHeight);
+                const radius = diameter / 2;
+
+                const rect = button.getBoundingClientRect();
+
+                circle.style.width = circle.style.height = `${diameter}px`;
+                circle.style.left = `${e.clientX - rect.left - radius}px`;
+                circle.style.top = `${e.clientY - rect.top - radius}px`;
+                circle.classList.add("ripple");
+
+                const ripple = button.getElementsByClassName("ripple")[0];
+                if (ripple) {
+                    ripple.remove();
+                }
+
+                button.appendChild(circle);
+            };
+
+            document.querySelectorAll('.card, .cta-button').forEach(el => {
+                el.addEventListener('click', createRipple);
+            });
+
+            // SVG Circular Reading Progress
+            const progressWrap = document.querySelector('.reading-progress-wrap');
+            const progressPath = document.querySelector('.progress-circle path');
+            const pathLength = progressPath.getTotalLength();
+
+            // Apply SVG stroke gradient dynamically
+            progressPath.style.stroke = "url(#perm-gradient-svg)";
+
+            progressPath.style.strokeDasharray = `${pathLength} ${pathLength}`;
+            progressPath.style.strokeDashoffset = pathLength;
+
+            const updateProgress = () => {
+                const scroll = window.scrollY || document.documentElement.scrollTop;
+                const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+                const progress = height > 0 ? scroll / height : 0;
+
+                // Reverse calculation: 0 scroll = full dashoffset (empty), 100% scroll = 0 dashoffset (full)
+                const dashoffset = pathLength - (progress * pathLength);
+                progressPath.style.strokeDashoffset = dashoffset;
+
+                if (scroll > 50) {
+                    progressWrap.classList.add('visible');
+                } else {
+                    progressWrap.classList.remove('visible');
+                }
+            };
+
+            // Initial check and scroll listener
+            updateProgress();
+            window.addEventListener('scroll', updateProgress, { passive: true });
+
+            // Click to scroll up
+            progressWrap.addEventListener('click', () => {
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            });
+        });
+    </script>
+</body>
+
+</html>
