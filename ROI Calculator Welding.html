@@ -1038,7 +1038,8 @@
 
             <div class="prw-lead-form">
                 <h3>Нужен точный расчет окупаемости?</h3>
-                <p>Вы увидели предварительные цифры. Оставьте заявку, и наши инженеры бесплатно рассчитают точную
+                <p>Вы увидели предварительные цифры. Оставьте заявку, и наши инженеры бесплатно рассчитают диапазон
+                    показателей,
                     стоимость и сделают 3D-макет вашего участка под деталь — всего за 5 дней.</p>
 
                 <div class="prw-lead-grid">
@@ -1259,6 +1260,18 @@
                 let paybackMonths = Math.round(investments / monthlySavings);
                 if (paybackMonths < 1) paybackMonths = 1;
                 document.getElementById('prw-res-payback').textContent = paybackMonths;
+
+                // Добавляем примечание о зависимости от оператора
+                const paybackContainer = document.getElementById('prw-res-payback').parentElement;
+                if (!document.getElementById('prw-performance-note')) {
+                    const note = document.createElement('div');
+                    note.id = 'prw-performance-note';
+                    note.style.fontSize = '12px';
+                    note.style.marginTop = '8px';
+                    note.style.color = 'var(--prw-text-muted)';
+                    note.innerHTML = '<i>* Реальная производительность зависит от навыков оператора и организации процессов. Конечные показатели фиксируются в ТЗ как диапазон (минимум/максимум).</i>';
+                    paybackContainer.appendChild(note);
+                }
 
                 // Save data to state for recalculation
                 state.calcData = {
